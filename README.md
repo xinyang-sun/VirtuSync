@@ -18,7 +18,7 @@ Mediapipe
 ## Demo
 
 
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113773482351171&bvid=BV1NZrtYAEaK&cid=27709410633&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+[Dome video](https://www.bilibili.com/video/BV1NZrtYAEaK/?share_source=copy_web&vd_source=9b95709580179b5fcb8562c82ecdfa35)
 
 
 ## How to use
