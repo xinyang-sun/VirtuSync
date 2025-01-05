@@ -1,7 +1,9 @@
 
-<p align="center">
+<div align="center">
+  
 English Version | [中文版本](./README.zh-cn.md)
-</p>
+
+</div>
 
 # VirtuSync
 
