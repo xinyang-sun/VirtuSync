@@ -1,7 +1,7 @@
 
 <div align="center">
   
-[English Version](https://github.com/xinyang-sun/VirtuSync/blob/main/README.md) | 中文版本
+[English Version](./README.md) | 中文版本
 
 </div>
 
