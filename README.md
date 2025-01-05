@@ -1,5 +1,7 @@
 
+<p align="center">
 English Version | [中文版本](./README.zh-cn.md)
+</p>
 
 # VirtuSync
 
@@ -15,15 +17,21 @@ This is a 3D motion capture software developed using Unity, Mediapipe, and Pytho
 
 ## Built With
 
-Unity2020.3.21f1c1
-Python 3.10
-Mediapipe
-<img src="https://flat.badgen.net/#static/license/MIT/blue" alt="license" />
+<div align="center">
+
+![Unity2020.3.21f1c1](https://img.shields.io/badge/Unity-2020.3.21f1c1-blue)
+![Python 3.10](https://img.shields.io/badge/Python-3.10-blue)
+![Mediapipe](https://img.shields.io/badge/Mediapipe-blue
+)
+[![license](https://img.shields.io/badge/license-MIT-blue
+)](https://github.com/xinyang-sun/VirtuSync?tab=MIT-1-ov-file)
+
+</div>
+
 
 ## Demo
 
-
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113773482351171&bvid=BV1NZrtYAEaK&cid=27709410633&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+[Demo video](https://www.bilibili.com/video/BV1NZrtYAEaK/?share_source=copy_web&vd_source=9b95709580179b5fcb8562c82ecdfa35)
 
 
 ## How to use
