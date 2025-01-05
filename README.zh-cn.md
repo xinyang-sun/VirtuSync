@@ -1,7 +1,9 @@
 
-<p align="center">
+<div align="center">
+  
 [English Version](https://github.com/xinyang-sun/VirtuSync/blob/main/README.md) | 中文版本
-</p>
+
+</div>
 
 # VirtuSync
 
