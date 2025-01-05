@@ -1,6 +1,6 @@
 
 <p align="center">
-[English Version](./README.md) | 中文版本
+[English Version](https://github.com/xinyang-sun/VirtuSync/blob/main/README.md) | 中文版本
 </p>
 
 # VirtuSync
