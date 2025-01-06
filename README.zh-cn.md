@@ -40,9 +40,9 @@
 
 [下载](https://github.com/xinyang-sun/VirtuSync/releases)最新的压缩包在releases中。
 
-**1. 启动相机**: 解压后点击运行`Tracking.exe`。输入`Port值`。默认是`5056`。选择`摄像头number`。在这需要从0开始一个个试出你想调用的摄像头。点击`Running`就能启动摄像头了。
+**1. 启动相机**: 解压后点击运行`Tracking.exe/VirtuSync_Camera.exe`。输入`Port值`。默认是`5056`。选择`摄像头number`。在这需要从0开始一个个试出你想调用的摄像头。点击`Running`就能启动摄像头了。
 
-**2. 启动3D动捕软件**: 运行`Model_test.exe`。输入同样的`Port值`，默认是`5056`。点击`Start`后软件会和摄像头进行串流连接。点击`Model`就能开始使用模型来直播啦。😉
+**2. 启动3D动捕软件**: 运行`Model_test.exe/VirtuSync_Model.exe`。输入同样的`Port值`，默认是`5056`。点击`Start`后软件会和摄像头进行串流连接。点击`Model`就能开始使用模型来直播啦。😉
 ## License
 [MIT](https://github.com/xinyang-sun/VirtuSync/tree/main?tab=MIT-1-ov-file)
 ## Reference
