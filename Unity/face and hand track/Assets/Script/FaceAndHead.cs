@@ -80,13 +80,13 @@ namespace landmarktest
                 rear = float.Parse(eyeMARpoints[1]);
                 mar = eyeMARpoints[2].Trim(' ', '\'');
                 mRatioM = mar.Split(';');
-                mRatioX = float.Parse(mRatioM[0]);
-                mRatioY = float.Parse(mRatioM[1]);
-                mRatioA = float.Parse(mRatioM[2]);
-                mRatioE = float.Parse(mRatioM[3]);
-                mRatioI = float.Parse(mRatioM[4]);
-                mRatioO = float.Parse(mRatioM[5]);
-                mRatioU = float.Parse(mRatioM[6]);
+                mRatioX = Mathf.Clamp(float.Parse(mRatioM[0]), 0f, 1f);
+                mRatioY = Mathf.Clamp(float.Parse(mRatioM[1]), 0f, 1f);
+                mRatioA = Mathf.Clamp(float.Parse(mRatioM[2]), 0f, 1f);
+                mRatioE = Mathf.Clamp(float.Parse(mRatioM[3]), 0f, 1f);
+                mRatioI = Mathf.Clamp(float.Parse(mRatioM[4]), 0f, 1f);
+                mRatioO = Mathf.Clamp(float.Parse(mRatioM[5]), 0f, 1f);
+                mRatioU = Mathf.Clamp(float.Parse(mRatioM[6]), 0f, 1f);
                 Debug.Log("lear: " + lear);
                 Debug.Log("rear: " + rear);
                 Debug.Log("mar: " + mar);
@@ -95,8 +95,8 @@ namespace landmarktest
                 m_blendShapes = GetComponent<VRM.VRMBlendShapeProxy>();
 
                 if (!AutoBlinkFlag)
-                {  
-                    if ((lear+rear)/2 < 0.2f)
+                {
+                    if ((lear + rear) / 2 < 0.2f)
                     {
                         m_blendShapes.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink_L), 1.0f);
                         m_blendShapes.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink_R), 1.0f);
