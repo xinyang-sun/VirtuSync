@@ -25,4 +25,4 @@ MonoBehaviour:
   CommercialUssage: 1
   OtherPermissionUrl: https://hub.vroid.com/license?allowed_to_use_user=everyone&characterization_allowed_user=everyone&corporate_commercial_use=allow&credit=unnecessary&modification=allow&personal_commercial_use=profit&redistribution=disallow&sexual_expression=allow&version=1&violent_expression=allow
   LicenseType: 8
-  OtherLicenseUrl: '&violent_expression=allowense?allowed_to_use_user=everyone&characterization_allowed_user=everyone&corporate_commercial_use=allow&credit=unnecessary&modification=allow&personal_commercial_use=profit&redistribution=disallow&sexual_expression=allow&version=1&violent_expression=allow'
+  OtherLicenseUrl: https://hub.vroid.com/license?allowed_to_use_user=everyone&characterization_allowed_user=everyone&corporate_commercial_use=allow&credit=unnecessary&modification=allow&personal_commercial_use=profit&redistribution=disallow&sexual_expression=allow&version=1&violent_expression=allow

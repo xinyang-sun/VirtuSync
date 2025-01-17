@@ -95,8 +95,8 @@ namespace landmarktest
                 m_blendShapes = GetComponent<VRM.VRMBlendShapeProxy>();
 
                 if (!AutoBlinkFlag)
-                {
-                    if ((lear + rear) / 2 < 0.2f)
+                {  
+                    if ((lear+rear)/2 < 0.2f)
                     {
                         m_blendShapes.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink_L), 1.0f);
                         m_blendShapes.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink_R), 1.0f);
