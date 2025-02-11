@@ -50,6 +50,7 @@ This is a 3D motion capture software developed using Unity, Mediapipe, and Pytho
 - To change the emoji bindings, click on the input box and enter letters or numbers. Just click on the input box and enter the alphanumeric keys directly.
 - The default reset button for emoticons is 0.
 - Once everything is set, click Save to save it.
+- **Note**: The keypad numeric keys and the keyboard numeric keys do not interoperate when binding. If you use the keypad numeric keys for binding, press the keypad numeric keys when using them.
 
 **4. Modify the background color of the model**: Click `Background Color` to open the color palette. Click `Close` to close the palette after modifying the color.
 ## License
