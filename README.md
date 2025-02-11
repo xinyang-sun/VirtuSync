@@ -46,7 +46,7 @@ This is a 3D motion capture software developed using Unity, Mediapipe, and Pytho
 
 **3. Expression Management System**: 
 - Click on the button `Edit Expressions` to open the model expression configuration page. Select the expression. The `slider` is to control the expression amplitude. The slider bar controls the range of the expression, from 0 to 100, which is convenient for displaying expression combinations.
-- On the right hand side, the expression binding buttons are `Alpha0` for `keyboard 0`. `Alpha1` for `keyboard 1` and so on. And so on.
+- On the right hand side, the expression binding buttons are `Alpha0` for `keyboard 0`. `Alpha1` for `keyboard 1` and so on.
 - To change the emoji bindings, click on the input box and enter letters or numbers. Just click on the input box and enter the alphanumeric keys directly.
 - The default reset button for emoticons is 0.
 - Once everything is set, click Save to save it.
