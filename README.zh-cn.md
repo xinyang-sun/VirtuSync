@@ -32,9 +32,9 @@
 
 
 ## Demo
--**视频演示**
+- **视频演示**
 [Demo video](https://www.bilibili.com/video/BV1NZrtYAEaK/?share_source=copy_web&vd_source=9b95709580179b5fcb8562c82ecdfa35)
--**GIF展示**
+- **GIF展示**
 ![相机控制](./Unity/face%20and%20hand%20track/GIF/camera_cn.gif)
 ![面捕功能](./Unity/face%20and%20hand%20track/GIF/face_cn.gif)
 ![手捕功能](./Unity/face%20and%20hand%20track/GIF/hand_cn.gif)
