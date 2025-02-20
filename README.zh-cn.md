@@ -35,6 +35,10 @@
 
 [Demo video](https://www.bilibili.com/video/BV1NZrtYAEaK/?share_source=copy_web&vd_source=9b95709580179b5fcb8562c82ecdfa35)
 
+![相机控制](./Unity/face and hand track/GIF/camera_cn.gif)
+![面捕功能](./Unity/face and hand track/GIF/face_cn.gif)
+![手捕功能](./Unity/face and hand track/GIF/hand_cn.gif)
+
 
 ## 如何使用
 
