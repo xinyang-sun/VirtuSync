@@ -32,8 +32,13 @@ This is a 3D motion capture software developed using Unity, Mediapipe, and Pytho
 
 
 ## Demo
-
+- **Video demo**
 [Demo video](https://www.bilibili.com/video/BV1NZrtYAEaK/?share_source=copy_web&vd_source=9b95709580179b5fcb8562c82ecdfa35)
+- **GIF Show**
+![Camera control](./Unity/face%20and%20hand%20track/GIF/camera_en.gif)
+![Face Capture Function](./Unity/face%20and%20hand%20track/GIF/face_en.gif)
+![Hand Capture Function](./Unity/face%20and%20hand%20track/GIF/hand_en.gif)
+
 
 
 ## How to use
