@@ -45,8 +45,13 @@
 [下载](https://github.com/xinyang-sun/VirtuSync/releases)最新的压缩包在releases中。
 
 **1. 启动相机**: 解压后点击运行`Tracking.exe/VirtuSync_Camera.exe`。输入`Port值`。默认是`5056`。选择`摄像头number`。在这需要从0开始一个个试出你想调用的摄像头。点击`Running`就能启动摄像头了。
+**隐私模式**：勾选Privacy Mode，开启隐私模式，此时相机画面为纯黑，保护使用者隐私。
 
-**2. 启动3D动捕软件**: 运行`Model_test.exe/VirtuSync_Model.exe`。输入同样的`Port值`，默认是`5056`。点击`Start`后软件会和摄像头进行串流连接。点击`Model`就能开始使用模型来直播啦。😉
+**2. 启动3D动捕软件**: 
+- 运行`Model_test.exe/VirtuSync_Model.exe`。
+- 首次运行软件时，点击`ReplaceVRM`。进行模型的选择。内置了两款模型。
+- 输入同样的`Port值`，默认是`5056`。点击`Start`后软件会和摄像头进行串流连接。
+- 点击`Model`就能开始使用模型来直播啦。😉
 
 **3. 模型表情控制**: 
 - 单击按钮`Edit Expressions`打开模型表情配置页面。下拉框选择表情。`滑动条`是控制表情幅度。从0到100.方便进行表情组合展示。
@@ -58,6 +63,11 @@
 - **注意**：小键盘数字键和键盘数字键在绑定时不互通。如果使用小键盘数字键进行绑定，使用时请按小键盘数字键。
 
 **4. 模型背景颜色修改**: 点击`Background Color`打开调色盘。修改完颜色后点击`Close`关闭。
+
+**5. 更换模型**: 
+- 把想替换的模型放入`VRMModels0.x`文件夹内。
+- 点击`ReplaceVRM`。进行模型的选择。
+- **注意**：目前只支持VRM0.x的模型，暂不支持VRM1.0的模型。
 ## License
 [MIT](https://github.com/xinyang-sun/VirtuSync/tree/main?tab=MIT-1-ov-file)
 ## Reference
