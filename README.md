@@ -46,6 +46,7 @@ This is a 3D motion capture software developed using Unity, Mediapipe, and Pytho
 [Download](https://github.com/xinyang-sun/VirtuSync/releases) the latest package in releases
 
 **1. Activate the camera**: Simply extract the archive and run `Tracking.exe/VirtuSync_Camera.exe`. Enter the `Port value`. The default is `5056`. Select the `camera number`. Here you need to try from 0 one by one until you find the camera you want to use. Click `Running` to turn on the camera.
+**Privacy Mode**: Check Privacy Mode to turn on the privacy mode, at this time the camera screen is pure black to protect the user's privacy.
 
 **2. Activate 3D motion capture software**: run `Model_test.exe/VirtuSync_Model.exe`. Enter the same `Port value`, the default is `5056`. Click `Start` and the software will stream with the camera. Click `Model` to enter the modeling interface, and start your vtuber experience. 😉
 
@@ -58,6 +59,12 @@ This is a 3D motion capture software developed using Unity, Mediapipe, and Pytho
 - **Note**: The keypad numeric keys and the keyboard numeric keys do not interoperate when binding. If you use the keypad numeric keys for binding, press the keypad numeric keys when using them.
 
 **4. Modify the background color of the model**: Click `Background Color` to open the color palette. Click `Close` to close the palette after modifying the color.
+
+**5. Replace Models**. 
+- Put the model you want to replace into the `VRMModels0.x` folder.
+- Click `ReplaceVRM`. Perform model selection.
+- **Note**: Currently, only VRM0.x models are supported, VRM1.0 models are not supported at the moment.
+
 ## License
 [MIT](https://github.com/xinyang-sun/VirtuSync/tree/main?tab=MIT-1-ov-file)
 ## Reference
