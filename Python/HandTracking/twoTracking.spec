@@ -41,4 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon='F:\\Mediapipe 2 hand track\\VirtuSync\\Icon.ico',
 )

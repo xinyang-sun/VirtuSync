@@ -91,6 +91,14 @@ def on_check():
     else:
         DebugNum = False
 
+showCameraVar = True
+def on_cam_view_chick():
+    global showCameraVar
+    if cam_view_var.get():
+        showCameraVar = False
+    else:
+        showCameraVar = True
+
 
 # PortGUI
 button = tk.Button(window,text='EnterPort', width=15, height=1, command=insertPort)
@@ -109,6 +117,12 @@ labelV.pack()
 camera_dropdown = ttk.Combobox(window, values=camera_list, state="readonly")
 camera_dropdown.bind("<<ComboboxSelected>>", on_camera_select)
 camera_dropdown.pack(padx=10, pady=10)
+
+#Camera_view_GUI
+cam_view_var = tk.BooleanVar()
+cam_view_var.set(False)
+cam_view_checkbox = tk.Checkbutton(window, text="Privacy Mode", variable=cam_view_var, command=on_cam_view_chick)
+cam_view_checkbox.place(x=295, y=144)
 
 class Stabilizer:
     """Using Kalman filter as a point stabilizer."""
@@ -360,6 +374,17 @@ def calculate_m_ratio(mouth):
         ratio_u or 0,
     )
 
+#手指关节角度计算
+def calculate_angle(A, B, C):
+    BA = np.array(A) - np.array(B)
+    BC = np.array(C) - np.array(B)
+    dot_prod = np.dot(BA, BC)
+    normBA = np.linalg.norm(BA)
+    normBC = np.linalg.norm(BC)
+    cos_angle = dot_prod / (normBA * normBC + 1e-6)  # 防止除0
+    angle = math.degrees(math.acos(np.clip(cos_angle, -1.0, 1.0)))
+    return angle
+
 # Main program
 def changeSwitch():
     # Webcam
@@ -387,6 +412,7 @@ def changeSwitch():
 
         # 使用Face Mesh处理图像
         faces = face_mesh.process(rgb_frame)
+
         if faces.multi_face_landmarks:
 
             # Introduce scalar stabilizers for pose.
@@ -567,54 +593,183 @@ def changeSwitch():
             if len(hands) == 2:
                 hand1 = hands[1]
                 hand1Type = hand1['type']
-                lmList1.append(hand1Type)
-                lmList1.append(hand1['lmList'])
+                #lmList1.append(hand1Type)
+                #lmList1.append(hand1['lmList'])
 
-                if lmList1[0] == "Left":
+                if hand1Type == "Left":
                     HandLeft = hand1['lmList']
                     HandRight = hand['lmList']
                 else:
                     HandLeft = hand['lmList']
                     HandRight = hand1['lmList']
 
-            if len(HandLeft) != 0 and len(HandRight) != 0:
-                Lx1, Ly1 = HandLeft[5][:2]
-                Lx2, Ly2 = HandLeft[17][:2]
-                Ldistance = int(math.sqrt((Ly2 - Ly1) ** 2 + (Lx2 - Lx1) ** 2))
-                A, B, C = coff
-                LdistanceCM = A * Ldistance ** 2 + B * Ldistance + C
+            # 定义一个函数，针对一只手计算所需角度
+            def get_hand_angles(hand_landmarks):
+                angles = {}
+                # 拇指：计算 [1,2,3] 和 [2,3,4] 两个关节角度
+                angles['thumb_MCP'] = calculate_angle(hand_landmarks[1][:2], hand_landmarks[2][:2],
+                                                      hand_landmarks[3][:2])
+                angles['thumb_IP'] = calculate_angle(hand_landmarks[2][:2], hand_landmarks[3][:2],
+                                                     hand_landmarks[4][:2])
+                # 食指：MCP 用 (0,5,6)，PIP 用 (5,6,7)，DIP 用 (6,7,8)
+                angles['index_MCP'] = calculate_angle(hand_landmarks[0][:2], hand_landmarks[5][:2],
+                                                      hand_landmarks[6][:2])
+                angles['index_PIP'] = calculate_angle(hand_landmarks[5][:2], hand_landmarks[6][:2],
+                                                      hand_landmarks[7][:2])
+                angles['index_DIP'] = calculate_angle(hand_landmarks[6][:2], hand_landmarks[7][:2],
+                                                      hand_landmarks[8][:2])
+                # 中指：MCP 用 (0,9,10)，PIP 用 (9,10,11)，DIP 用 (10,11,12)
+                angles['middle_MCP'] = calculate_angle(hand_landmarks[0][:2], hand_landmarks[9][:2],
+                                                       hand_landmarks[10][:2])
+                angles['middle_PIP'] = calculate_angle(hand_landmarks[9][:2], hand_landmarks[10][:2],
+                                                       hand_landmarks[11][:2])
+                angles['middle_DIP'] = calculate_angle(hand_landmarks[10][:2], hand_landmarks[11][:2],
+                                                       hand_landmarks[12][:2])
+                # 无名指：MCP 用 (0,13,14)，PIP 用 (13,14,15)，DIP 用 (14,15,16)
+                angles['ring_MCP'] = calculate_angle(hand_landmarks[0][:2], hand_landmarks[13][:2],
+                                                     hand_landmarks[14][:2])
+                angles['ring_PIP'] = calculate_angle(hand_landmarks[13][:2], hand_landmarks[14][:2],
+                                                     hand_landmarks[15][:2])
+                angles['ring_DIP'] = calculate_angle(hand_landmarks[14][:2], hand_landmarks[15][:2],
+                                                     hand_landmarks[16][:2])
+                # 小指：MCP 用 (0,17,18)，PIP 用 (17,18,19)，DIP 用 (18,19,20)
+                angles['pinky_MCP'] = calculate_angle(hand_landmarks[0][:2], hand_landmarks[17][:2],
+                                                      hand_landmarks[18][:2])
+                angles['pinky_PIP'] = calculate_angle(hand_landmarks[17][:2], hand_landmarks[18][:2],
+                                                      hand_landmarks[19][:2])
+                angles['pinky_DIP'] = calculate_angle(hand_landmarks[18][:2], hand_landmarks[19][:2],
+                                                      hand_landmarks[20][:2])
+                # 手指间展开角：例如用手指根部和中指根部来衡量
+                angles['spread_index_middle'] = calculate_angle(hand_landmarks[6][:2], hand_landmarks[5][:2],
+                                                                hand_landmarks[9][:2])
+                angles['spread_ring_middle'] = calculate_angle(hand_landmarks[14][:2], hand_landmarks[13][:2],
+                                                               hand_landmarks[9][:2])
+                angles['spread_pinky_middle'] = calculate_angle(hand_landmarks[18][:2], hand_landmarks[17][:2],
+                                                                hand_landmarks[13][:2])
+                return angles
 
-                Rx1, Ry1 = HandRight[5][:2]
-                Rx2, Ry2 = HandRight[17][:2]
-                Rdistance = int(math.sqrt((Ry2 - Ry1) ** 2 + (Rx2 - Rx1) ** 2))
-                A, B, C = coff
-                RdistanceCM = A * Rdistance ** 2 + B * Rdistance + C
-            elif len(HandLeft) != 0 and len(HandRight) == 0:
-                Lx1, Ly1 = HandLeft[5][:2]
-                Lx2, Ly2 = HandLeft[17][:2]
-                Ldistance = int(math.sqrt((Ly2 - Ly1) ** 2 + (Lx2 - Lx1) ** 2))
-                A, B, C = coff
-                LdistanceCM = A * Ldistance ** 2 + B * Ldistance + C
-            elif len(HandLeft) == 0 and len(HandRight) != 0:
-                Rx1, Ry1 = HandRight[5][:2]
-                Rx2, Ry2 = HandRight[17][:2]
-                Rdistance = int(math.sqrt((Ry2 - Ry1) ** 2 + (Rx2 - Rx1) ** 2))
-                A, B, C = coff
-                RdistanceCM = A * Rdistance ** 2 + B * Rdistance + C
-            # print(LdistanceCM, RdistanceCM)
+                # 针对左右手分别计算角度，并添加到数据中
 
             if len(HandLeft) != 0:
+                angles_left = get_hand_angles(HandLeft)
                 data.extend(["Left"])
-            for lm in HandLeft:
-                data.extend([lm[0], height - lm[1], lm[2], LdistanceCM])
+                # 输出角度。这里的顺序为：
+                # 食指弯曲（对应 7,6,5）、中指（11,10,9）、无名指（15,14,13）、小指（19,18,17）、拇指（3,2，即thumb_MCP和thumb_IP），
+                # 以及手指间的角度 (6,5,9), (14,13,9), (18,17,13)
+                data.extend([
+                    angles_left['thumb_MCP'],
+                    angles_left['thumb_IP'],
+                    angles_left['index_MCP'],
+                    angles_left['index_PIP'],
+                    angles_left['index_DIP'],
+                    angles_left['middle_MCP'],
+                    angles_left['middle_PIP'],
+                    angles_left['middle_DIP'],
+                    angles_left['ring_MCP'],
+                    angles_left['ring_PIP'],
+                    angles_left['ring_DIP'],
+                    angles_left['pinky_MCP'],
+                    angles_left['pinky_PIP'],
+                    angles_left['pinky_DIP'],
+                    angles_left['spread_index_middle'],
+                    angles_left['spread_ring_middle'],
+                    angles_left['spread_pinky_middle']
+                ])
+            if len(HandLeft) == 21:
+                for HL in HandLeft:
+                    data.extend([HL[0], HL[1], HL[2]])
+            scale = 1.0
             if len(HandRight) != 0:
+                angles_right = get_hand_angles(HandRight)
                 data.extend(["Right"])
-            for lm1 in HandRight:
-                data.extend([lm1[0], height - lm1[1], lm1[2], RdistanceCM])
+                data.extend([
+                    angles_right['thumb_MCP'],
+                    angles_right['thumb_IP'],
+                    angles_right['index_MCP'],
+                    angles_right['index_PIP'],
+                    angles_right['index_DIP'],
+                    angles_right['middle_MCP'],
+                    angles_right['middle_PIP'],
+                    angles_right['middle_DIP'],
+                    angles_right['ring_MCP'],
+                    angles_right['ring_PIP'],
+                    angles_right['ring_DIP'],
+                    angles_right['pinky_MCP'],
+                    angles_right['pinky_PIP'],
+                    angles_right['pinky_DIP'],
+                    angles_right['spread_index_middle'],
+                    angles_right['spread_ring_middle'],
+                    angles_right['spread_pinky_middle']
+                ])
+                if len(HandRight) == 21:
+                    for HR in HandRight:
+                        data.extend([HR[0], HR[1], HR[2]])
+                # # 绘制右手各个角度
+                # x, y = int(HandRight[2][0] * scale), int(HandRight[2][1] * scale)
+                # cv2.putText(img, f"{angles_right['thumb_MCP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[3][0] * scale), int(HandRight[3][1] * scale)
+                # cv2.putText(img, f"{angles_right['thumb_IP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                #
+                # x, y = int(HandRight[5][0] * scale), int(HandRight[5][1] * scale)
+                # cv2.putText(img, f"{angles_right['index_MCP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[6][0] * scale), int(HandRight[6][1] * scale)
+                # cv2.putText(img, f"{angles_right['index_PIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[7][0] * scale), int(HandRight[7][1] * scale)
+                # cv2.putText(img, f"{angles_right['index_DIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                #
+                # x, y = int(HandRight[9][0] * scale), int(HandRight[9][1] * scale)
+                # cv2.putText(img, f"{angles_right['middle_MCP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                #             (0, 255, 0), 1)
+                # x, y = int(HandRight[10][0] * scale), int(HandRight[10][1] * scale)
+                # cv2.putText(img, f"{angles_right['middle_PIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                #             (0, 255, 0), 1)
+                # x, y = int(HandRight[11][0] * scale), int(HandRight[11][1] * scale)
+                # cv2.putText(img, f"{angles_right['middle_DIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                #             (0, 255, 0), 1)
+                #
+                # x, y = int(HandRight[13][0] * scale), int(HandRight[13][1] * scale)
+                # cv2.putText(img, f"{angles_right['ring_MCP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[14][0] * scale), int(HandRight[14][1] * scale)
+                # cv2.putText(img, f"{angles_right['ring_PIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[15][0] * scale), int(HandRight[15][1] * scale)
+                # cv2.putText(img, f"{angles_right['ring_DIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                #
+                # x, y = int(HandRight[17][0] * scale), int(HandRight[17][1] * scale)
+                # cv2.putText(img, f"{angles_right['pinky_MCP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[18][0] * scale), int(HandRight[18][1] * scale)
+                # cv2.putText(img, f"{angles_right['pinky_PIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+                # x, y = int(HandRight[19][0] * scale), int(HandRight[19][1] * scale)
+                # cv2.putText(img, f"{angles_right['pinky_DIP']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
+                #             1)
+
+                # x, y = int(HandRight[5][0] * scale), int(HandRight[5][1] * scale)
+                # # cv2.putText(img, f"{angles_right['spread_index_middle']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                # #             (0, 0, 255), 1)
+                # x, y = int(HandRight[13][0] * scale), int(HandRight[13][1] * scale)
+                # # cv2.putText(img, f"{angles_right['spread_ring_middle']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                # #             (0, 0, 255), 1)
+                # x, y = int(HandRight[17][0] * scale), int(HandRight[17][1] * scale)
+                # # cv2.putText(img, f"{angles_right['spread_pinky_middle']:.1f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                # #             (0, 0, 255), 1)
 
         if faces or hands:
             print(data)
             sock.sendto(str.encode(str(data)), serverAddressPort)
+
+        # Camera_show_or_not
+        if not showCameraVar:
+            # 纯黑背景
+            img = np.zeros(img.shape, dtype=np.uint8)
 
         img = cv2.resize(img, (0, 0), None, 0.5, 0.5)
         cv2.imshow("Image", img)
