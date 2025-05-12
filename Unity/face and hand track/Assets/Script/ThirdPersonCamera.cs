@@ -17,6 +17,24 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void Start()
     {
+        if (target == null)
+        {
+            // 1. 查找场景中名为 "M" 的根物体
+            GameObject mRoot = GameObject.Find("M");                                  // 静态查找根级对象&#8203;:contentReference[oaicite:1]{index=1}
+            if (mRoot != null)
+            {
+                // 2. 在其子孙中获取第一个 Animator 组件
+                Animator anim = mRoot.GetComponentInChildren<Animator>();              // 递归查找子对象&#8203;:contentReference[oaicite:2]{index=2}
+                if (anim != null && anim.isHuman)
+                {
+                    // 3. 获取 Humanoid 骨骼中的 Neck Transform 并赋值
+                    target = anim.GetBoneTransform(HumanBodyBones.Neck);               // 获取颈部骨骼&#8203;:contentReference[oaicite:3]{index=3}
+                    if (target == null)
+                        Debug.LogWarning("未能获取 Neck 骨骼 Transform，请检查 Avatar 是否为 Humanoid");
+                }
+            }
+        }
+
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;

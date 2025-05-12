@@ -12,6 +12,14 @@ namespace landmarktest
                 return;
             Target.SetPositionAndRotation(this.transform.position, this.transform.rotation);
         }
+
+        // void start()
+        // {
+        // }
+        void Update()
+        {
+            UpdateTransform();
+        }
     }
 }
 

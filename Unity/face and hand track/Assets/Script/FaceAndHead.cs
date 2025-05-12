@@ -4,7 +4,7 @@ using UnityEngine;
 using VRM;
 namespace landmarktest
 {
-    [RequireComponent(typeof(Animator))]
+    //[RequireComponent(typeof(Animator))]
     public class FaceAndHead : MonoBehaviour
     {
         public UDPReceive udpReceive;
@@ -14,8 +14,7 @@ namespace landmarktest
         public float max_rotation_angle = 45.0f;
         VRMBlendShapeProxy m_blendShapes;
         //public SkinnedMeshRenderer eye, eye_lid, mouth, eyebrow;
-
-        private Animator anim;
+        public Animator anim;
         private Vector3 head = new Vector3(0, 0, 0);
         private string mar;
         private float roll = 0, pitch = 0, yaw = 0, lear = 1.0f, rear = 1.0f, mRatioX = 0f, mRatioY = 0f, mRatioA = 0f, mRatioE = 0f, mRatioI = 0f, mRatioO = 0f, mRatioU = 0f, eyeTarget_x = 0f, eyeTarget_y = 0f;
@@ -35,15 +34,42 @@ namespace landmarktest
             Debug.Log(AutoBlinkFlag);
         }
 
+        void RefreshReferences()
+        {
+            /* Animator */
+            anim = GetComponentInChildren<Animator>(true);
+            if (!anim)
+            {
+                Debug.LogWarning($"{name} 找不到 Animator，请确认 Model1 是子物体");
+                return;
+            }
+
+            /* Neck transform & 基准旋转 */
+            neck = anim.GetBoneTransform(HumanBodyBones.Neck);
+            neck_quat = Quaternion.Euler(0, 90, -90);   // 原脚本基准
+
+            /* BlendShapeProxy */
+            m_blendShapes = GetComponentInChildren<VRMBlendShapeProxy>(true);
+            if (!m_blendShapes)
+                Debug.LogWarning($"{name} 找不到 VRMBlendShapeProxy");
+
+            /* 初始化插值目标 */
+            targetNeckRotation = neck ? neck.rotation : Quaternion.identity;
+        }
+
+        /* Unity 在子物体增删时会调用 */
+        void OnTransformChildrenChanged() => RefreshReferences();
+
         void Start()
         {
-            anim = GetComponent<Animator>();
-            neck = anim.GetBoneTransform(HumanBodyBones.Neck);
-            neck_quat = Quaternion.Euler(0, 90, -90);
+            RefreshReferences();
+            //anim = GetComponent<Animator>();
+            //neck = anim.GetBoneTransform(HumanBodyBones.Neck);
+            //neck_quat = Quaternion.Euler(0, 90, -90);
 
             // Initialize the target neck rotation to the current rotation and targetPosition for eyes
-            targetNeckRotation = neck.rotation;
-            targetPosition = transform.position;
+            // targetNeckRotation = neck.rotation;
+            // targetPosition = transform.position;
 
             GameObject target = GameObject.Find("target");
             if (target != null)
@@ -61,6 +87,10 @@ namespace landmarktest
         // Update is called once per frame
         void Update()
         {
+            /* 没有引用就尝试补绑一次（防止极端时机错过） */
+            if (!m_blendShapes || !anim) RefreshReferences();
+            if (!anim) return;   // 依旧找不到就先退出
+
             string data = udpReceive.data;
             string[] eyeMARpoints = null;
             string[] mRatioM = null;
@@ -82,21 +112,21 @@ namespace landmarktest
                 mRatioM = mar.Split(';');
                 mRatioX = float.Parse(mRatioM[0]);
                 mRatioY = float.Parse(mRatioM[1]);
-                mRatioA = float.Parse(mRatioM[2]);
-                mRatioE = float.Parse(mRatioM[3]);
-                mRatioI = float.Parse(mRatioM[4]);
-                mRatioO = float.Parse(mRatioM[5]);
-                mRatioU = float.Parse(mRatioM[6]);
+                mRatioA = Mathf.Clamp01(float.Parse(mRatioM[2]));
+                mRatioE = Mathf.Clamp01(float.Parse(mRatioM[3]));
+                mRatioI = Mathf.Clamp01(float.Parse(mRatioM[4]));
+                mRatioO = Mathf.Clamp01(float.Parse(mRatioM[5]));
+                mRatioU = Mathf.Clamp01(float.Parse(mRatioM[6]));
                 Debug.Log("lear: " + lear);
                 Debug.Log("rear: " + rear);
                 Debug.Log("mar: " + mar);
                 Debug.Log("mRX" + mRatioX);
                 Debug.Log("mRY" + mRatioY);
-                m_blendShapes = GetComponent<VRM.VRMBlendShapeProxy>();
+                //m_blendShapes = GetComponent<VRM.VRMBlendShapeProxy>();
 
                 if (!AutoBlinkFlag)
-                {  
-                    if ((lear+rear)/2 < 0.2f)
+                {
+                    if ((lear + rear) / 2 < 0.2f)
                     {
                         m_blendShapes.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink_L), 1.0f);
                         m_blendShapes.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink_R), 1.0f);

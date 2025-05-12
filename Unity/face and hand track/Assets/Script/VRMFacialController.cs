@@ -38,6 +38,30 @@ public class VRMFacialController : MonoBehaviour
 
     void Start()
     {
+        configPanel.SetActive(false);
+        // —— 自动查找 M 下的子模型并赋值 vrmModel —— 
+        if (vrmModel == null)
+        {
+            var mRoot = GameObject.Find("M");
+            if (mRoot != null)
+            {
+                // 在 M 的所有子孙中查找第一个 VRMBlendShapeProxy
+                var proxy = mRoot.GetComponentInChildren<VRMBlendShapeProxy>(true);
+                if (proxy != null)
+                {
+                    vrmModel = proxy.gameObject;
+                }
+                else
+                {
+                    Debug.LogWarning("[VRMFacialController] 未在 M 下找到 VRMBlendShapeProxy 组件");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[VRMFacialController] 场景中未找到名为 'M' 的 GameObject");
+            }
+        }
+
         InitializeVRMComponents();
         PopulateBlendShapeList(); // 初始化下拉选单选项
         LoadSavedConfig();
@@ -104,10 +128,10 @@ public class VRMFacialController : MonoBehaviour
         foreach (var config in expressionConfigs)
         {
             if (config.blendShapeKey.Equals(default(BlendShapeKey)))
-    {
-        //Debug.LogWarning("检测到 ExpressionConfig 的 blendShapeKey 为 null，跳过此配置。");
-        continue;
-    }
+            {
+                //Debug.LogWarning("检测到 ExpressionConfig 的 blendShapeKey 为 null，跳过此配置。");
+                continue;
+            }
             if (!blendShapeWeights.ContainsKey(config.blendShapeKey))
             {
                 blendShapeWeights[config.blendShapeKey] = 0f;

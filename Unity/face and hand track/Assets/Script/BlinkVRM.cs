@@ -26,6 +26,26 @@ namespace VRM
                 m_nextRequest = Time.time + 1.0f;
             }
         }
+        /// <summary>在自己或子物体里寻找 BlendShapeProxy</summary>
+        void RefreshBlendShapeProxy()
+        {
+            // 先找已有引用是否还活着
+            if (m_blendShapes) return;
+
+            // 1) 自己身上
+            m_blendShapes = GetComponent<VRMBlendShapeProxy>();
+
+            // 2) 子物体（包括刚替换的新 Model1）
+            if (!m_blendShapes)
+                m_blendShapes = GetComponentInChildren<VRMBlendShapeProxy>(true);
+
+            if (!m_blendShapes)
+                Debug.LogWarning($"{name} 找不到 VRMBlendShapeProxy，请确认 Model1 已作为子物体挂载。");
+        }
+
+        /// <summary>模型被替换时会触发 TransformChildrenChanged，可在此重新绑定</summary>
+        void OnTransformChildrenChanged() => RefreshBlendShapeProxy();
+
         IEnumerator BlinkRoutine()
         {
             while (true)
@@ -80,7 +100,7 @@ namespace VRM
 
         private void OnEnable()
         {
-            m_blendShapes = GetComponent<VRM.VRMBlendShapeProxy>();
+            RefreshBlendShapeProxy();
             m_coroutine = StartCoroutine(BlinkRoutine());
         }
         private void OnDisable()

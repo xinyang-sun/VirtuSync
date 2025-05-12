@@ -17,6 +17,7 @@ public class ChangeCamera : MonoBehaviour
     public GameObject Panel;
     public GameObject EditExpressionsButton;
     public GameObject OpenColorPickerButton;
+    public GameObject ReplaceVRMButton;
     private bool isHidden = false;
     private ResolutionManager resolutionManager;
     private Vector2 originalAnchorMin;  // 按钮初始位置的锚点
@@ -75,6 +76,7 @@ public class ChangeCamera : MonoBehaviour
         AutoBlinker.SetActive(!isHidden);
         EditExpressionsButton.SetActive(!isHidden);
         OpenColorPickerButton.SetActive(!isHidden);
+        ReplaceVRMButton.SetActive(!isHidden);
         ResetHandButton.SetActive(isHidden);
         CameraButton.GetComponentInChildren<Text>().text = isHidden ? "Menu" : "Model";
 
